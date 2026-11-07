@@ -59,9 +59,9 @@ def chips(x, y, items, t, size=12.5, gap=8, pad=11, h=26):
 def header(t):
     W, H = 1000, 350
     css = """
-    .scan{animation:scan 2.6s ease-in-out .4s 1 both}
-    .cur{animation:blink 1s linear 3s 3 both}
-    @keyframes scan{0%{transform:translateY(0);opacity:0}12%{opacity:1}80%{transform:translateY(90px);opacity:1}100%{transform:translateY(90px);opacity:0}}
+    .scan{animation:scan 7s ease-in-out .4s infinite both}
+    .cur{animation:blink 1.1s linear infinite both}
+    @keyframes scan{0%{transform:translateY(0);opacity:0}5%{opacity:1}34%{transform:translateY(90px);opacity:1}40%,100%{transform:translateY(90px);opacity:0}}
     @keyframes blink{0%,49.9%{opacity:1}50%,99.9%{opacity:0}100%{opacity:1}}
     """
     b = [text(48, 74, "RUSH LABS · FOUNDER & LEAD ENGINEER", "mono", 13, t["accent"], 600, ls=2),
@@ -185,18 +185,18 @@ def motif(kind, t, delay):
 
 
 CARD_CSS = """
-.land{animation:land 1.2s ease-in-out 2 both}
-@keyframes land{0%,100%{opacity:1}50%{opacity:.15}}
-.ping{animation:ping 1.6s ease-out 3 both}
-@keyframes ping{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(3)}}
-.requote{animation:requote 1.4s ease-in-out 2 both}
-@keyframes requote{0%,100%{transform:translateX(0)}50%{transform:translateX(-6px)}}
-.packet{animation:packet 1.1s ease-in 3 both}
-@keyframes packet{0%{opacity:0;transform:translateX(0)}15%{opacity:1}85%{opacity:1;transform:translateX(30px)}100%{opacity:0;transform:translateX(32px)}}
-.row{animation:row .9s ease-out 1 both}
-@keyframes row{0%{opacity:.5}100%{opacity:0}}
-.climb{animation:climb 2.2s ease-in-out 1 both}
-@keyframes climb{0%{opacity:0;transform:translate(0,0)}10%{opacity:1}20%{transform:translate(10px,-6px)}40%{transform:translate(20px,-14px)}60%{transform:translate(30px,-24px)}80%{opacity:1;transform:translate(42px,-36px)}100%{opacity:0;transform:translate(48px,-36px)}}
+.land{animation:land 5s ease-in-out infinite both}
+@keyframes land{0%,30%,100%{opacity:1}15%{opacity:.15}}
+.ping{animation:ping 3s ease-out infinite both}
+@keyframes ping{0%{opacity:.9;transform:scale(1)}55%,100%{opacity:0;transform:scale(3)}}
+.requote{animation:requote 5s ease-in-out infinite both}
+@keyframes requote{0%,40%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}}
+.packet{animation:packet 2.8s ease-in infinite both}
+@keyframes packet{0%{opacity:0;transform:translateX(0)}6%{opacity:1}36%{opacity:1;transform:translateX(30px)}42%,100%{opacity:0;transform:translateX(32px)}}
+.row{animation:row 4.5s ease-out infinite both}
+@keyframes row{0%{opacity:.5}22%,100%{opacity:0}}
+.climb{animation:climb 5.5s ease-in-out infinite both}
+@keyframes climb{0%{opacity:0;transform:translate(0,0)}4%{opacity:1}9%{transform:translate(10px,-6px)}18%{transform:translate(20px,-14px)}27%{transform:translate(30px,-24px)}36%{opacity:1;transform:translate(42px,-36px)}42%,100%{opacity:0;transform:translate(48px,-36px)}}
 """
 
 
@@ -222,7 +222,8 @@ def card(c, key, t, side, delay):
 def award(t):
     W, H = 1000, 96
     # flags are "captured" one by one: each pennant runs up its pole (rest state = raised, full colour)
-    css = (".pen{animation:raise .55s cubic-bezier(.34,1.56,.64,1) both}"
+    css = (".pen{animation:raise .55s cubic-bezier(.34,1.56,.64,1) both,wave 6s ease-in-out infinite}"
+           "@keyframes wave{0%,14%,100%{transform:translateY(0)}7%{transform:translateY(-2px)}}"
            "@keyframes raise{0%{opacity:.25;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}"
            ".count{animation:count .4s ease-out 2.2s both}@keyframes count{0%{opacity:.3}100%{opacity:1}}")
     b = [text(40, 42, "RECOGNITION", "mono", 12, t["accent"], 600, ls=2),
@@ -232,7 +233,7 @@ def award(t):
     for i in range(12):
         x = x0 + i * step
         b.append(f'<line x1="{x}" y1="49" x2="{x}" y2="72" stroke="{t["muted"]}" stroke-opacity=".45" stroke-width="1.5" stroke-linecap="round"/>')
-        b.append(f'<path class="pen" style="animation-delay:{.6 + i * .11:.2f}s" d="M{x + .75} 49.5 L{x + 11} 53.5 L{x + .75} 57.5 Z" fill="{t["accent"]}"/>')
+        b.append(f'<path class="pen" style="animation-delay:{.6 + i * .11:.2f}s,{2.4 + i * .09:.2f}s" d="M{x + .75} 49.5 L{x + 11} 53.5 L{x + .75} 57.5 Z" fill="{t["accent"]}"/>')
     b.append(text(956, 42, "12 / 12 FLAGS", "mono count", 11.5, t["muted"], anchor="end", ls=1.5))
     title = "Recognition: 2nd of 47 teams, BuidlGuidl AI CTF at Devcon 8, Mumbai, November 2026. 12 of 12 flags captured."
     return svg(W, H, title, "".join(b), t, css)
@@ -251,8 +252,8 @@ def stack(t):
     W, row = 1000, 42
     H = 56 + len(STACK) * row + 18
     span = (len(STACK) - 1) * row
-    css = (".sweep{animation:sweep 2.4s ease-in-out .8s 1 both}"
-           f"@keyframes sweep{{0%{{opacity:0;transform:translateY(0)}}12%{{opacity:1}}85%{{opacity:1;transform:translateY({span}px)}}100%{{opacity:0;transform:translateY({span}px)}}}}")
+    css = (".sweep{animation:sweep 8s ease-in-out .8s infinite both}"
+           f"@keyframes sweep{{0%{{opacity:0;transform:translateY(0)}}4%{{opacity:1}}28%{{opacity:1;transform:translateY({span}px)}}34%,100%{{opacity:0;transform:translateY({span}px)}}}}")
     b = [text(40, 42, "STACK", "mono", 12, t["accent"], 600, ls=2),
          f'<rect class="fx sweep" x="24" y="{62 - 6}" width="952" height="38" rx="8" fill="{t["accent"]}" fill-opacity=".10"/>']
     for i, (label, items) in enumerate(STACK):
@@ -270,7 +271,7 @@ DISCORD_PATH = "M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00
 
 def footer(t):
     W, H = 1000, 64
-    css = (".ring{animation:ring 1.8s ease-out 1s 4 both}"
+    css = (".ring{animation:ring 2.4s ease-out 1s infinite both}"
            "@keyframes ring{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(3.2)}}")
     m = t["muted"]
     b = [f'<circle class="fx ring pivot" cx="44" cy="32" r="5" fill="none" stroke="{t["ok"]}" stroke-width="1.5"/>',

@@ -4,16 +4,16 @@
 .pivot{transform-box:fill-box;transform-origin:center}
 @media (prefers-reduced-motion: reduce){ *{animation:none !important} }
 
-.land{animation:land 1.2s ease-in-out 2 both}
-@keyframes land{0%,100%{opacity:1}50%{opacity:.15}}
-.ping{animation:ping 1.6s ease-out 3 both}
-@keyframes ping{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(3)}}
-.requote{animation:requote 1.4s ease-in-out 2 both}
-@keyframes requote{0%,100%{transform:translateX(0)}50%{transform:translateX(-6px)}}
-.packet{animation:packet 1.1s ease-in 3 both}
-@keyframes packet{0%{opacity:0;transform:translateX(0)}15%{opacity:1}85%{opacity:1;transform:translateX(30px)}100%{opacity:0;transform:translateX(32px)}}
-.row{animation:row .9s ease-out 1 both}
-@keyframes row{0%{opacity:.5}100%{opacity:0}}
-.climb{animation:climb 2.2s ease-in-out 1 both}
-@keyframes climb{0%{opacity:0;transform:translate(0,0)}10%{opacity:1}20%{transform:translate(10px,-6px)}40%{transform:translate(20px,-14px)}60%{transform:translate(30px,-24px)}80%{opacity:1;transform:translate(42px,-36px)}100%{opacity:0;transform:translate(48px,-36px)}}
+.land{animation:land 5s ease-in-out infinite both}
+@keyframes land{0%,30%,100%{opacity:1}15%{opacity:.15}}
+.ping{animation:ping 3s ease-out infinite both}
+@keyframes ping{0%{opacity:.9;transform:scale(1)}55%,100%{opacity:0;transform:scale(3)}}
+.requote{animation:requote 5s ease-in-out infinite both}
+@keyframes requote{0%,40%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}}
+.packet{animation:packet 2.8s ease-in infinite both}
+@keyframes packet{0%{opacity:0;transform:translateX(0)}6%{opacity:1}36%{opacity:1;transform:translateX(30px)}42%,100%{opacity:0;transform:translateX(32px)}}
+.row{animation:row 4.5s ease-out infinite both}
+@keyframes row{0%{opacity:.5}22%,100%{opacity:0}}
+.climb{animation:climb 5.5s ease-in-out infinite both}
+@keyframes climb{0%{opacity:0;transform:translate(0,0)}4%{opacity:1}9%{transform:translate(10px,-6px)}18%{transform:translate(20px,-14px)}27%{transform:translate(30px,-24px)}36%{opacity:1;transform:translate(42px,-36px)}42%,100%{opacity:0;transform:translate(48px,-36px)}}
 </style><rect x="0.5" y="0.5" width="491" height="245" rx="18" fill="#F6EFE3" stroke="#E2D6BF"/><g transform="translate(0,0)"><text xml:space="preserve" x="32" y="44" class="mono" font-size="12" fill="#8A6A22" font-weight="600" text-anchor="start" letter-spacing="1.5" >POLYMARKET · OPEN SOURCE</text><text xml:space="preserve" x="460" y="44" class="mono" font-size="12" fill="#4E6157" font-weight="400" text-anchor="end" letter-spacing="0" >v0.1 · 2026</text><text xml:space="preserve" x="31" y="84" class="sans" font-size="30" fill="#0A1C16" font-weight="800" text-anchor="start" letter-spacing="-0.5" >Polyfarmer</text><text xml:space="preserve" x="32" y="118" class="sans" font-size="15.5" fill="#4E6157" font-weight="400" text-anchor="start" letter-spacing="0" >Self-hosted quoting bot for liquidity rewards,</text><text xml:space="preserve" x="32" y="140" class="sans" font-size="15.5" fill="#4E6157" font-weight="400" text-anchor="start" letter-spacing="0" >with per-market risk limits.</text><text xml:space="preserve" x="32" y="176" class="sans" font-size="15" fill="#0A1C16" font-weight="650" text-anchor="start" letter-spacing="0" >Rust · MIT · keys never leave the host</text><rect x="32.0" y="196" width="52.5" height="26" rx="7" fill="#EAE0CC" stroke="#E2D6BF"/><text xml:space="preserve" x="58.2" y="213.5" class="mono" font-size="12.5" fill="#4E6157" font-weight="400" text-anchor="middle" letter-spacing="0" >Rust</text><rect x="92.5" y="196" width="60.1" height="26" rx="7" fill="#EAE0CC" stroke="#E2D6BF"/><text xml:space="preserve" x="122.6" y="213.5" class="mono" font-size="12.5" fill="#4E6157" font-weight="400" text-anchor="middle" letter-spacing="0" >Tokio</text><rect x="160.6" y="196" width="52.5" height="26" rx="7" fill="#EAE0CC" stroke="#E2D6BF"/><text xml:space="preserve" x="186.9" y="213.5" class="mono" font-size="12.5" fill="#4E6157" font-weight="400" text-anchor="middle" letter-spacing="0" >Axum</text><rect x="221.1" y="196" width="52.5" height="26" rx="7" fill="#EAE0CC" stroke="#E2D6BF"/><text xml:space="preserve" x="247.4" y="213.5" class="mono" font-size="12.5" fill="#4E6157" font-weight="400" text-anchor="middle" letter-spacing="0" >htmx</text><text xml:space="preserve" x="460" y="215" class="sans" font-size="18" fill="#8A6A22" font-weight="700" text-anchor="end" letter-spacing="0" >↗</text><rect x="436" y="56.0" width="22" height="4" rx="1.5" fill="#4E6157" opacity="0.35"/><rect x="426" y="62.5" width="32" height="4" rx="1.5" fill="#4E6157" opacity="0.35"/><rect x="414" y="69.0" width="44" height="4" rx="1.5" fill="#4E6157" opacity="0.35"/><line x1="392" y1="77.5" x2="458" y2="77.5" stroke="#E2D6BF" stroke-dasharray="2 3"/><rect class="requote" style="animation-delay:2.4s" x="402" y="82.0" width="56" height="4" rx="1.5" fill="#8A6A22" opacity="1"/><rect x="418" y="88.5" width="40" height="4" rx="1.5" fill="#4E6157" opacity="0.35"/><rect x="430" y="95.0" width="28" height="4" rx="1.5" fill="#4E6157" opacity="0.35"/></g></svg>
