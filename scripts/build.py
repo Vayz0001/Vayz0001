@@ -273,13 +273,58 @@ def footer(t):
     return svg(W, H, title, "".join(b), t, css)
 
 
-for name, t in THEMES.items():
-    (OUT / f"header-{name}.svg").write_text(header(t))
-    (OUT / f"award-{name}.svg").write_text(award(t))
-    (OUT / f"stack-{name}.svg").write_text(stack(t))
-    (OUT / f"footer-{name}.svg").write_text(footer(t))
-    for i, (key, c) in enumerate(CARDS):
-        side = "L" if i % 2 == 0 else "R"
-        (OUT / f"card-{key}-{name}.svg").write_text(card(c, key, t, side, delay=1.0 + i * 0.35))
+# ── Build: version-stamped filenames (bypasses GitHub's image cache) + README ──
+import hashlib
 
-print("wrote", len(list(OUT.glob("*.svg"))), "svgs")
+files = {}
+for name, t in THEMES.items():
+    files[f"header-{name}"] = header(t)
+    files[f"award-{name}"] = award(t)
+    files[f"stack-{name}"] = stack(t)
+    files[f"footer-{name}"] = footer(t)
+    for i, (key, c) in enumerate(CARDS):
+        files[f"card-{key}-{name}"] = card(c, key, t, "L" if i % 2 == 0 else "R", delay=1.0 + i * 0.35)
+
+VER = hashlib.sha1("".join(files[k] for k in sorted(files)).encode()).hexdigest()[:7]
+for old in OUT.glob("*.svg"):
+    old.unlink()
+for stem, content in files.items():
+    (OUT / f"{stem}.{VER}.svg").write_text(content)
+
+LINKS = {
+    "frenbot": "https://rushlabs.io/work/frenbot",
+    "zing": "https://rushlabs.io/work/mempool-alerts",
+    "dataapi": "https://rushlabs.io/work/onchain-infrastructure",
+    "launchpad": "https://rushlabs.io",
+    "polyfarmer": "https://github.com/Vayz0001/polyfarmer",
+    "execution": "https://rushlabs.io",
+}
+
+
+def pic(stem, alt, width="100%", href=None):
+    p = (f'<picture><source media="(prefers-color-scheme: dark)" srcset="assets/{stem}-dark.{VER}.svg">'
+         f'<img alt="{escape(alt)}" src="assets/{stem}-light.{VER}.svg" width="{width}"></picture>')
+    return f'<a href="{href}">{p}</a>' if href else p
+
+
+def alt_of(c):
+    return f'{c["title"]}: {" ".join(c["desc"])} {c["stat"]}.'
+
+
+rows = []
+for i in range(0, len(CARDS), 2):
+    (ka, ca), (kb, cb) = CARDS[i], CARDS[i + 1]
+    # no whitespace between the two cards: exactly 50% + 50% of the README width
+    rows.append(pic(f"card-{ka}", alt_of(ca), "50%", LINKS[ka]) + pic(f"card-{kb}", alt_of(cb), "50%", LINKS[kb]))
+
+readme = "\n\n".join([
+    pic("header", "Vayz — founder and lead engineer at Rush Labs. Low-latency execution and on-chain data infrastructure. "
+                  "FrenBot: $10M+ cumulative volume, 2,500+ users, under 30 ms mempool-to-submit, same-block inclusion."),
+    "<p>\n" + "\n".join(rows) + "\n</p>",
+    pic("award", "Recognition: 2nd of 47 teams, BuidlGuidl AI CTF at Devcon 8, Mumbai, November 2026. 12 of 12 flags captured.",
+        href="https://ctf-mumbai.buidlguidl.com/leaderboard"),
+    pic("stack", "Stack. " + " ".join(f'{l.title()}: {", ".join(i)}.' for l, i in STACK)),
+    pic("footer", "Available for contract work and infrastructure roles. Discord: vayzzz. rushlabs.io", href="https://rushlabs.io"),
+]) + "\n"
+(OUT.parent / "README.md").write_text(readme)
+print("version", VER, "·", len(files), "svgs + README.md")
