@@ -63,8 +63,8 @@ def header(t):
     b = []
     b.append(text(48, 74, "RUSH LABS · FOUNDER & LEAD ENGINEER", "mono", 13, t["accent"], 600, ls=2))
     b.append(text(44, 152, "Vayz", "sans", 80, t["text"], 800, ls=-1.5))
-    b.append(text(48, 196, "Low-latency trading systems, on-chain", "sans", 20, t["muted"]))
-    b.append(text(48, 224, "infrastructure, and the dashboards on top.", "sans", 20, t["muted"]))
+    b.append(text(48, 196, "Low-latency trading systems and on-chain", "sans", 20, t["muted"]))
+    b.append(text(48, 224, "data infrastructure, built end to end.", "sans", 20, t["muted"]))
 
     # terminal panel
     px, py, pw, ph = 560, 40, 392, 196
@@ -80,14 +80,14 @@ def header(t):
     b.append(f'<g>{text(lx, ly + step, "› pool_create seen in mempool", "mono", 14, t["text"])}</g>')
     b.append(f'<g>{text(lx, ly + 2 * step, "› prebuilt tx submitted", "mono", 14, t["text"])}'
              f'{text(px + pw - 22, ly + 2 * step, "< 30 ms", "mono", 14, t["accent"], 700, anchor="end")}</g>')
-    b.append(f'<g>{text(lx, ly + 3 * step, "› included in the same block", "mono", 14, t["text"])}'
+    b.append(f'<g>{text(lx, ly + 3 * step, "› landed in the pool-creation block", "mono", 14, t["text"])}'
              f'{text(px + pw - 22, ly + 3 * step, "✓", "mono", 15, t["ok"], 700, anchor="end")}</g>')
     b.append(f'<rect class="cur" x="{lx}" y="{ly + 4 * step - 13}" width="9" height="17" fill="{t["accent"]}"/>')
 
     # metrics row
     b.append(f'<line x1="48" y1="262" x2="952" y2="262" stroke="{t["border"]}"/>')
-    metrics = [("$10M+", "TRADING VOLUME"), ("2,500+", "TRADERS SERVED"),
-               ("< 30 ms", "MEMPOOL → SUBMIT"), ("Same block", "AS POOL CREATION")]
+    metrics = [("$10M+", "CUMULATIVE VOLUME"), ("2,500+", "USERS"),
+               ("< 30 ms", "MEMPOOL → SUBMIT"), ("Same block", "BUYS ON NEW POOLS")]
     col = (952 - 48) / 4
     for i, (v, c) in enumerate(metrics):
         x = 48 + i * col
@@ -95,33 +95,43 @@ def header(t):
             b.append(f'<line x1="{x - 18:.0f}" y1="282" x2="{x - 18:.0f}" y2="326" stroke="{t["border"]}"/>')
         b.append(text(round(x, 1), 304, v, "sans", 26, t["text"], 750))
         b.append(text(round(x, 1), 326, c, "mono", 11.5, t["muted"], ls=1.5))
-    title = ("Vayz — founder and lead engineer at Rush Labs. Low-latency trading systems, on-chain infrastructure "
-             "and dashboards. FrenBot: $10M+ volume, 2,500+ traders, under 30 ms mempool-to-submission, "
-             "buys landing in the same block as pool creation.")
+    title = ("Vayz — founder and lead engineer at Rush Labs. Low-latency trading systems and on-chain data "
+             "infrastructure. FrenBot: $10M+ cumulative volume, 2,500+ users, under 30 ms mempool-to-submission, "
+             "buys landing in the pool-creation block.")
     return svg(W, H, title, "".join(b), t, anim)
 
 
 # ── Work cards ──────────────────────────────────────────────────────────────
 CARDS = {
     "frenbot": dict(kicker="CARDANO · TRADING TERMINAL", period="2024 – 2026", title="FrenBot",
-                    desc=["Mempool-native execution engine. Pre-built",
-                          "transactions fire the moment a pool appears."],
-                    stat="$10M+ volume · 2,500+ traders · same-block buys",
-                    chips=["Go", "Rust", "TypeScript", "Ogmios", "Kupo"]),
+                    desc=["Mempool-triggered execution in Rust and Go.",
+                          "Pre-built transactions, sent to 7 endpoints at once."],
+                    stat="$10M+ volume · 2,500+ users · same-block buys",
+                    chips=["Rust", "Go", "TypeScript", "Ogmios", "Kupo"]),
     "zing": dict(kicker="CARDANO · WALLET ALERTS", period="2024 – now", title="Zing",
-                 desc=["Wallet and liquidity alerts streamed from the",
-                       "mempool, before block confirmation."],
+                 desc=["Wallet and pool alerts read from the mempool,",
+                       "delivered before block confirmation."],
                  stat="1,500+ users · millions of notifications",
-                 chips=["Cardano node", "Ogmios", "Kupo", "Discord"]),
+                 chips=["Ogmios", "Kupo", "WebSockets", "Firestore"]),
+    "dataapi": dict(kicker="CARDANO · INDEXING", period="2024", title="Chain data API",
+                    desc=["Go API over a self-hosted db-sync index:",
+                          "holders, balances and token metadata in SQL."],
+                    stat="Partner APIs for Cardano DEXs and aggregators",
+                    chips=["Go", "Fiber", "PostgreSQL", "Kupo"]),
+    "launchpad": dict(kicker="CARDANO · TOKEN LAUNCHPAD", period="2025", title="pump.fren",
+                      desc=["Bonding-curve launchpad backend: a sharded",
+                            "transaction pipeline with DEX migration."],
+                      stat="6 parallel workers · mint → trade → migrate",
+                      chips=["TypeScript", "Bun", "Elysia", "Lucid"]),
     "polyfarmer": dict(kicker="POLYMARKET · OPEN SOURCE", period="v0.1 · 2026", title="Polyfarmer",
-                       desc=["Self-hosted liquidity-rewards engine with",
-                             "per-market risk limits and a live dashboard."],
-                       stat="Order-book ladder · rewards analytics · encrypted keys",
+                       desc=["Self-hosted Polymarket liquidity-rewards bot,",
+                             "with per-market risk limits and a live order book."],
+                       stat="Rust · MIT licensed · keys never leave the host",
                        chips=["Rust", "Tokio", "Axum", "htmx"]),
     "execution": dict(kicker="POLYMARKET · CLIENT WORK", period="private", title="Execution engine",
-                      desc=["Event-driven order execution. Pre-built",
-                            "orders go out the instant a trigger fires."],
-                      stat="Sub-millisecond internal trigger-to-order",
+                      desc=["Event-driven order execution in Rust.",
+                            "Pre-built orders go out the instant a trigger fires."],
+                      stat="Near-zero build time on the hot path",
                       chips=["Rust", "Polymarket CLOB"]),
 }
 
@@ -154,6 +164,16 @@ def motif(kind, t):
         o.append(f'<line x1="404" y1="76" x2="432" y2="76" stroke="{m}" stroke-width="2" stroke-dasharray="3 3"/>')
         o.append(f'<path d="M428 70 L436 76 L428 82" fill="none" stroke="{m}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>')
         o.append(f'<rect x="440" y="67" width="18" height="18" rx="4" fill="{a}"/>')
+    elif kind == "dataapi":  # result table, header row highlighted
+        for i in range(4):
+            y = 58 + i * 10
+            o.append(f'<rect x="392" y="{y}" width="30" height="6" rx="2" fill="{a if i == 0 else m}" opacity="{1 if i == 0 else .35}"/>')
+            o.append(f'<rect x="426" y="{y}" width="32" height="6" rx="2" fill="{a if i == 0 else m}" opacity="{1 if i == 0 else .35}"/>')
+    elif kind == "launchpad":  # stepped bonding curve -> migration
+        o.append(f'<polyline points="388,96 398,96 398,90 408,90 408,82 418,82 418,72 428,72 428,60 436,60" fill="none" stroke="{a}" stroke-width="2.5" stroke-linejoin="round"/>')
+        o.append(f'<line x1="388" y1="100" x2="436" y2="100" stroke="{bd}"/>')
+        o.append(f'<path d="M440 60 L448 60 M445 56 L449 60 L445 64" fill="none" stroke="{m}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>')
+        o.append(f'<rect x="451" y="54" width="10" height="12" rx="2.5" fill="{a}"/>')
     return "".join(o)
 
 
@@ -175,12 +195,10 @@ def card(c, key, t):
 
 # ── Stack ───────────────────────────────────────────────────────────────────
 STACK = [
-    ("LANGUAGES", ["Rust", "Go", "TypeScript", "JavaScript"]),
-    ("BACKEND", ["Tokio", "Axum", "Bun", "Elysia", "WebSockets", "REST"]),
-    ("DATA", ["MongoDB", "Redis", "Firebase"]),
-    ("FRONTEND", ["Svelte", "htmx", "HTML / CSS"]),
-    ("INFRA", ["AWS", "Azure", "Hetzner", "OVH", "DigitalOcean", "Cloudflare", "Vercel", "Linux", "GitHub Actions"]),
-    ("WEB3", ["Cardano node", "Ogmios", "Kupo", "Lucid", "Mesh", "EVM", "Solana", "Polymarket CLOB"]),
+    ("SYSTEMS", ["Rust (Tokio, Axum)", "Go (Fiber)", "TypeScript (Bun, Node)"]),
+    ("CHAIN · EXECUTION", ["Ogmios", "Kupo", "cardano-db-sync", "Lucid", "Polymarket CLOB"]),
+    ("DATA", ["PostgreSQL", "Redis", "MongoDB", "Firestore"]),
+    ("OPS", ["Linux", "AWS", "Azure", "PM2", "Self-hosted Cardano nodes"]),
 ]
 
 
@@ -191,7 +209,7 @@ def stack(t):
     for i, (label, items) in enumerate(STACK):
         y = 62 + i * row
         b.append(text(40, y + 17, label, "mono", 11.5, t["muted"], ls=1.5))
-        ch, _ = chips(170, y, items, t, size=12.5, gap=7, pad=10)
+        ch, _ = chips(210, y, items, t, size=12.5, gap=7, pad=10)
         b.append(ch)
     title = "Stack — " + "; ".join(f'{l.title()}: {", ".join(i)}' for l, i in STACK)
     return svg(W, H, title, "".join(b), t)
