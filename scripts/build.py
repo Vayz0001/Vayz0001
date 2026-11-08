@@ -237,6 +237,86 @@ def award(t):
     return svg(W, H, title, "".join(b), t, css)
 
 
+# ── Phone variants (swapped in under 768px; the README is ~310px wide there) ──
+def wrap(s, max_w, size, em=0.53):
+    """Greedy word wrap using an average glyph width estimate."""
+    lines, cur = [], ""
+    for word in s.split(" "):
+        if word == "·" and cur:          # never start a line with a separator
+            cur += " ·"
+            continue
+        trial = f"{cur} {word}".strip()
+        if len(trial) * size * em <= max_w or not cur:
+            cur = trial
+        else:
+            lines.append(cur)
+            cur = word
+    return lines + ([cur] if cur else [])
+
+
+def header_m(t):
+    W, H = 400, 418
+    css = (".ring{animation:ring 2.4s ease-out 1s infinite both}"
+           "@keyframes ring{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(3.2)}}")
+    P = 24
+    b = [text(P, 46, "RUSH LABS · FOUNDER & LEAD ENGINEER", "sans", 14, t["accent"], 700, ls=0.4),
+         text(P - 2, 110, "Vayz", "sans", 62, t["text"], 700, ls=-1),
+         text(P, 146, "Low latency execution and on-chain", "sans", 19, t["muted"]),
+         text(P, 171, "data infrastructure.", "sans", 19, t["muted"]),
+         f'<circle class="fx ring pivot" cx="{P + 6}" cy="205" r="5" fill="none" stroke="{t["ok"]}" stroke-width="1.5"/>',
+         f'<circle cx="{P + 6}" cy="205" r="5" fill="{t["ok"]}"/>',
+         text(P + 20, 211, "Available for contract work", "sans", 17, t["text"], 700),
+         f'<line x1="{P}" y1="234" x2="{W - P}" y2="234" stroke="{t["border"]}"/>']
+    metrics = [("$10M+", ["Cumulative volume"]), ("2,500+", ["Users"]),
+               ("< 30 ms", ["Reaction time", "100× faster"]), ("40+", ["Clients since 2021"])]
+    for i, (v, caps) in enumerate(metrics):
+        x = P + (i % 2) * 180
+        y = 278 + (i // 2) * 76
+        b.append(text(x, y, v, "sans", 28, t["text"], 700))
+        for j, c in enumerate(caps):
+            b.append(text(x, y + 22 + j * 19, c, "sans", 16, t["muted"]))
+    title = ("Vayz, founder and lead engineer at Rush Labs. Low latency execution and on-chain data infrastructure. "
+             "Available for contract work. $10M+ cumulative volume, 2,500+ users, under 30 ms reaction time "
+             "(100× faster), 40+ clients since 2021.")
+    return svg(W, H, title, "".join(b), t, css)
+
+
+CARD_W_M, CARD_H_M, GAP_M = 210, 150, 24
+
+
+def card_m(c, t, side):
+    half = GAP_M // 2
+    W, H = CARD_W_M + half, CARD_H_M
+    dx = 0 if side == "L" else half
+    P = 16
+    b = [text(P, 30, c["cat"], "sans", 13, t["accent"], 700),
+         text(P, 58, c["title"], "sans", 20, t["text"], 700, ls=-0.3)]
+    for i, line in enumerate(wrap(c["line"], CARD_W_M - 2 * P, 16)[:3]):
+        b.append(text(P, 86 + i * 20, line, "sans", 16, t["muted"]))
+    body = f'<g transform="translate({dx},0)">{"".join(b)}</g>'
+    title = f'{c["title"]} ({c["cat"]}, {c["years"]}): {c["line"]}.'
+    return svg(W, H, title, body, t, "", rect=(dx + 0.5, 0.5, CARD_W_M - 1, CARD_H_M - 1))
+
+
+def award_m(t):
+    W, H = 400, 96
+    css = (".pen{animation:raise .55s cubic-bezier(.34,1.56,.64,1) both,wave 6s ease-in-out infinite}"
+           "@keyframes raise{0%{opacity:.25;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}"
+           "@keyframes wave{0%,14%,100%{transform:translateY(0)}7%{transform:translateY(-2px)}}")
+    P = 24
+    b = [text(P, 42, "2nd of 47 teams", "sans", 20, t["text"], 700),
+         text(P, 70, "BuidlGuidl AI CTF · Devcon 8 · 12 of 12 flags", "sans", 15, t["muted"])]
+    step = 12
+    x0 = W - P - 11 * step - 9
+    for i in range(12):
+        x = x0 + i * step
+        b.append(f'<line x1="{x}" y1="24" x2="{x}" y2="42" stroke="{t["muted"]}" stroke-opacity=".75" stroke-width="1.3" stroke-linecap="round"/>')
+        b.append(f'<path class="pen" style="animation-delay:{.6 + i * .11:.2f}s,{2.4 + i * .09:.2f}s" '
+                 f'd="M{x + .65} 24.5 L{x + 9} 27.5 L{x + .65} 30.5 Z" fill="{t["accent"]}"/>')
+    title = "2nd of 47 teams, BuidlGuidl AI CTF at Devcon 8, Mumbai, November 2026. 12 of 12 flags captured."
+    return svg(W, H, title, "".join(b), t, css)
+
+
 # ── Footer icons (inline in markdown text) ──────────────────────────────────
 def icon_discord():
     return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" role="img" aria-label="Discord">'
@@ -254,8 +334,12 @@ files = {"icon-discord": icon_discord(), "icon-web": icon_web()}
 for name, t in THEMES.items():
     files[f"header-{name}"] = header(t)
     files[f"award-{name}"] = award(t)
+    files[f"header-m-{name}"] = header_m(t)
+    files[f"award-m-{name}"] = award_m(t)
     for i, (key, c) in enumerate(CARDS):
-        files[f"card-{key}-{name}"] = card(c, key, t, "L" if i % 2 == 0 else "R", delay=1.0 + i * 0.35)
+        side = "L" if i % 2 == 0 else "R"
+        files[f"card-{key}-{name}"] = card(c, key, t, side, delay=1.0 + i * 0.35)
+        files[f"card-m-{key}-{name}"] = card_m(c, t, side)
 
 VER = hashlib.sha1("".join(files[k] for k in sorted(files)).encode()).hexdigest()[:7]
 for old in OUT.glob("*.svg"):
@@ -264,9 +348,18 @@ for stem, content in files.items():
     (OUT / f"{stem}.{VER}.svg").write_text(content)
 
 
-def pic(stem, alt, width="100%", href=None):
-    p = (f'<picture><source media="(prefers-color-scheme: dark)" srcset="assets/{stem}-dark.{VER}.svg">'
-         f'<img alt="{escape(alt)}" src="assets/{stem}-light.{VER}.svg" width="{width}"></picture>')
+MOBILE = "(max-width: 767px)"   # verified on github.com: themed-picture keeps width queries intact
+
+
+def pic(stem, alt, width="100%", href=None, mobile=None):
+    """<picture> with light/dark sources, plus phone-sized sources when a mobile stem is given.
+    Order matters: the first matching <source> wins."""
+    src = ""
+    if mobile:
+        src += (f'<source media="{MOBILE} and (prefers-color-scheme: dark)" srcset="assets/{mobile}-dark.{VER}.svg">'
+                f'<source media="{MOBILE}" srcset="assets/{mobile}-light.{VER}.svg">')
+    src += f'<source media="(prefers-color-scheme: dark)" srcset="assets/{stem}-dark.{VER}.svg">'
+    p = f'<picture>{src}<img alt="{escape(alt)}" src="assets/{stem}-light.{VER}.svg" width="{width}"></picture>'
     return f'<a href="{href}">{p}</a>' if href else p
 
 
@@ -276,13 +369,14 @@ def card_alt(c):
 
 blocks = [pic("header", "Vayz, founder and lead engineer at Rush Labs. Low latency execution and on-chain data infrastructure. "
                         "Available for contract work. $10M+ cumulative volume, 2,500+ users, under 30 ms reaction time "
-                        "(100× faster), 40+ clients since 2021.")]
+                        "(100× faster), 40+ clients since 2021.", mobile="header-m")]
 for i in range(0, len(CARDS), 2):
     (ka, ca), (kb, cb) = CARDS[i], CARDS[i + 1]
     # no whitespace between the two cards: exactly 50% + 50% of the README width
-    blocks.append(pic(f"card-{ka}", card_alt(ca), "50%", ca["href"]) + pic(f"card-{kb}", card_alt(cb), "50%", cb["href"]))
+    blocks.append(pic(f"card-{ka}", card_alt(ca), "50%", ca["href"], mobile=f"card-m-{ka}")
+                  + pic(f"card-{kb}", card_alt(cb), "50%", cb["href"], mobile=f"card-m-{kb}"))
 blocks.append(pic("award", "2nd of 47 teams, BuidlGuidl AI CTF at Devcon 8, Mumbai, November 2026. 12 of 12 flags captured.",
-                  href="https://ctf-mumbai.buidlguidl.com/leaderboard"))
+                  href="https://ctf-mumbai.buidlguidl.com/leaderboard", mobile="award-m"))
 blocks.append(f'<p align="center">'
               f'<img src="assets/icon-discord.{VER}.svg" height="15" alt="Discord"> <code>vayzzz</code>'
               f'&nbsp;&nbsp;·&nbsp;&nbsp;'
