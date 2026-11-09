@@ -117,7 +117,7 @@ def header(t):
 # ── Work cards: 2 columns; the gap is drawn inside each SVG so outer edges align ──
 CARDS = [
     ("frenbot", dict(cat="Cardano · Execution", years="2024–26", title="FrenBot",
-                     line="Traded new pools straight from the mempool",
+                     line="Multi-wallet trading terminal · $100K+\u00a0in\u00a0fees",
                      tags=["Rust", "Go", "Ogmios"], href="https://rushlabs.io/work/frenbot")),
     ("execution", dict(cat="Polymarket · Execution", years="2025", title="Execution engine",
                        line="Orders prepared in advance, fired on trigger",
