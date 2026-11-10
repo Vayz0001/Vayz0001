@@ -331,7 +331,9 @@ def icon_web():
 
 # ── Build ───────────────────────────────────────────────────────────────────
 files = {"icon-discord": icon_discord(), "icon-web": icon_web()}
-for name, t in THEMES.items():
+# Dark only: the profile shows the deep green theme in GitHub's light and dark modes alike.
+for name in ("dark",):
+    t = THEMES[name]
     files[f"header-{name}"] = header(t)
     files[f"award-{name}"] = award(t)
     files[f"header-m-{name}"] = header_m(t)
@@ -352,14 +354,10 @@ MOBILE = "(max-width: 767px)"   # verified on github.com: themed-picture keeps w
 
 
 def pic(stem, alt, width="100%", href=None, mobile=None):
-    """<picture> with light/dark sources, plus phone-sized sources when a mobile stem is given.
-    Order matters: the first matching <source> wins."""
-    src = ""
+    """Dark image, plus a phone-sized source when a mobile stem is given."""
+    p = f'<img alt="{escape(alt)}" src="assets/{stem}-dark.{VER}.svg" width="{width}">'
     if mobile:
-        src += (f'<source media="{MOBILE} and (prefers-color-scheme: dark)" srcset="assets/{mobile}-dark.{VER}.svg">'
-                f'<source media="{MOBILE}" srcset="assets/{mobile}-light.{VER}.svg">')
-    src += f'<source media="(prefers-color-scheme: dark)" srcset="assets/{stem}-dark.{VER}.svg">'
-    p = f'<picture>{src}<img alt="{escape(alt)}" src="assets/{stem}-light.{VER}.svg" width="{width}"></picture>'
+        p = f'<picture><source media="{MOBILE}" srcset="assets/{mobile}-dark.{VER}.svg">{p}</picture>'
     return f'<a href="{href}">{p}</a>' if href else p
 
 
