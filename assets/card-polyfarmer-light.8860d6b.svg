@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 196" width="500" height="196" role="img" aria-label="Polyfarmer (Polymarket · Open source, 2026): Open source market maker · keys stay local. Rust, Tokio, Axum."><title>Polyfarmer (Polymarket · Open source, 2026): Open source market maker · keys stay local. Rust, Tokio, Axum.</title><style>
+.sans{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans',Helvetica,Arial,sans-serif} .mono{font-family:ui-monospace,SFMono-Regular,'SF Mono',Menlo,Consolas,'Liberation Mono',monospace}
+.fx{opacity:0}
+.pivot{transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion: reduce){ *{animation:none !important} }
+
+.land{animation:land 5s ease-in-out infinite both}
+@keyframes land{0%,30%,100%{opacity:1}15%{opacity:.15}}
+.ping{animation:ping 3s ease-out infinite both}
+@keyframes ping{0%{opacity:.9;transform:scale(1)}55%,100%{opacity:0;transform:scale(3)}}
+.requote{animation:requote 5s ease-in-out infinite both}
+@keyframes requote{0%,40%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}}
+.packet{animation:packet 2.8s ease-in infinite both}
+@keyframes packet{0%{opacity:0;transform:translateX(0)}6%{opacity:1}36%{opacity:1;transform:translateX(19px)}42%,100%{opacity:0;transform:translateX(21px)}}
+.row{animation:row 4.5s ease-out infinite both}
+@keyframes row{0%{opacity:.5}22%,100%{opacity:0}}
+.fan{animation:fan 3.2s ease-in infinite both}
+@keyframes fan{0%{opacity:0;transform:translate(0,0)}6%{opacity:1}34%{opacity:1;transform:translate(36px,var(--dy))}40%,100%{opacity:0;transform:translate(38px,var(--dy))}}
+</style><rect x="12.5" y="0.5" width="487" height="195" rx="18" fill="#F6EFE3" stroke="#E2D6BF"/><g transform="translate(12,0)"><text xml:space="preserve" x="40" y="46" class="sans" font-size="14" fill="#735614" font-weight="700" text-anchor="start" letter-spacing="0" >Polymarket · Open source</text><text xml:space="preserve" x="40" y="84" class="sans" font-size="28" fill="#0A1C16" font-weight="700" text-anchor="start" letter-spacing="-0.4" >Polyfarmer</text><text xml:space="preserve" x="40" y="120" class="sans" font-size="18" fill="#45574D" font-weight="400" text-anchor="start" letter-spacing="0" >Open source market maker · keys stay local</text><rect x="40.0" y="142" width="56.2" height="28" rx="7" fill="#EAE0CC" stroke="#E2D6BF"/><text xml:space="preserve" x="68.1" y="161.04" class="mono" font-size="14" fill="#45574D" font-weight="400" text-anchor="middle" letter-spacing="0" >Rust</text><rect x="104.2" y="142" width="64.7" height="28" rx="7" fill="#EAE0CC" stroke="#E2D6BF"/><text xml:space="preserve" x="136.5" y="161.04" class="mono" font-size="14" fill="#45574D" font-weight="400" text-anchor="middle" letter-spacing="0" >Tokio</text><rect x="176.9" y="142" width="56.2" height="28" rx="7" fill="#EAE0CC" stroke="#E2D6BF"/><text xml:space="preserve" x="204.9" y="161.04" class="mono" font-size="14" fill="#45574D" font-weight="400" text-anchor="middle" letter-spacing="0" >Axum</text><text xml:space="preserve" x="448" y="46" class="mono" font-size="14" fill="#45574D" font-weight="400" text-anchor="end" letter-spacing="0" >2026</text><g transform="translate(0,22)"><rect x="430" y="31" width="18" height="4" rx="1.5" fill="#45574D" opacity="0.4"/><rect x="420" y="38" width="28" height="4" rx="1.5" fill="#45574D" opacity="0.4"/><rect x="410" y="45" width="38" height="4" rx="1.5" fill="#45574D" opacity="0.4"/><line x1="398" y1="54" x2="448" y2="54" stroke="#E2D6BF" stroke-dasharray="2 3"/><rect class="requote" style="animation-delay:2.75s" x="398" y="59" width="50" height="4" rx="1.5" fill="#735614" opacity="1"/><rect x="414" y="66" width="34" height="4" rx="1.5" fill="#45574D" opacity="0.4"/><rect x="426" y="73" width="22" height="4" rx="1.5" fill="#45574D" opacity="0.4"/></g></g></svg>
