@@ -93,14 +93,14 @@ def header(t):
     b.append(text(lx, ly, "$", "mono", 14, t["accent"], 700) + text(lx + 16, ly, "frenbot --watch mempool", "mono", 14, t["muted"]))
     b.append(text(lx, ly + step, "› pool_create detected", "mono", 14, t["text"]))
     b.append(text(lx, ly + 2 * step, "› prebuilt tx submitted", "mono", 14, t["text"])
-             + text(px + pw - 22, ly + 2 * step, "< 30 ms", "mono", 14, t["accent"], 700, anchor="end"))
+             + text(px + pw - 22, ly + 2 * step, "~30 ms", "mono", 14, t["accent"], 700, anchor="end"))
     b.append(text(lx, ly + 3 * step, "› included · same block", "mono", 14, t["text"])
              + text(px + pw - 22, ly + 3 * step, "✓", "mono", 15, t["ok"], 700, anchor="end"))
     b.append(f'<rect class="cur" x="{lx}" y="{ly + 4 * step - 13}" width="9" height="17" fill="{t["accent"]}"/>')
 
     b.append(f'<line x1="{PAD}" y1="290" x2="{W - PAD}" y2="290" stroke="{t["border"]}"/>')
     metrics = [("$10M+", "Cumulative volume"), ("2,500+", "Users"),
-               ("< 30 ms", "Reaction time · 100× faster"), ("40+", "Clients since 2021")]
+               ("~30 ms", "Reaction time · was 1–3 s"), ("40+", "Clients since 2021")]
     col = (W - 2 * PAD) / 4
     for i, (v, c) in enumerate(metrics):
         x = PAD + i * col
@@ -109,8 +109,8 @@ def header(t):
         b.append(text(round(x, 1), 332, v, "sans", 30, t["text"], 700))
         b.append(text(round(x, 1), 354, c, "sans", 15, t["muted"]))
     title = ("Vayz, founder and lead engineer at Rush Labs. Low latency execution and on-chain data infrastructure. "
-             "Available for contract work. $10M+ cumulative volume, 2,500+ users, under 30 ms reaction time "
-             "(100× faster), 40+ clients since 2021.")
+             "Available for contract work. $10M+ cumulative volume, 2,500+ users, about 30 ms reaction time "
+             "(was 1–3 s), 40+ clients since 2021.")
     return svg(W, H, title, "".join(b), t, css)
 
 
@@ -268,7 +268,7 @@ def header_m(t):
          text(P + 20, 211, "Available for contract work", "sans", 17, t["text"], 700),
          f'<line x1="{P}" y1="234" x2="{W - P}" y2="234" stroke="{t["border"]}"/>']
     metrics = [("$10M+", ["Cumulative volume"]), ("2,500+", ["Users"]),
-               ("< 30 ms", ["Reaction time", "100× faster"]), ("40+", ["Clients since 2021"])]
+               ("~30 ms", ["Reaction time", "was 1–3 s"]), ("40+", ["Clients since 2021"])]
     for i, (v, caps) in enumerate(metrics):
         x = P + (i % 2) * 180
         y = 278 + (i // 2) * 76
@@ -276,8 +276,8 @@ def header_m(t):
         for j, c in enumerate(caps):
             b.append(text(x, y + 22 + j * 19, c, "sans", 16, t["muted"]))
     title = ("Vayz, founder and lead engineer at Rush Labs. Low latency execution and on-chain data infrastructure. "
-             "Available for contract work. $10M+ cumulative volume, 2,500+ users, under 30 ms reaction time "
-             "(100× faster), 40+ clients since 2021.")
+             "Available for contract work. $10M+ cumulative volume, 2,500+ users, about 30 ms reaction time "
+             "(was 1–3 s), 40+ clients since 2021.")
     return svg(W, H, title, "".join(b), t, css)
 
 
@@ -368,8 +368,8 @@ def card_alt(c):
 
 
 blocks = [pic("header", "Vayz, founder and lead engineer at Rush Labs. Low latency execution and on-chain data infrastructure. "
-                        "Available for contract work. $10M+ cumulative volume, 2,500+ users, under 30 ms reaction time "
-                        "(100× faster), 40+ clients since 2021.", mobile="header-m")]
+                        "Available for contract work. $10M+ cumulative volume, 2,500+ users, about 30 ms reaction time "
+                        "(was 1–3 s), 40+ clients since 2021.", mobile="header-m")]
 for i in range(0, len(CARDS), 2):
     (ka, ca), (kb, cb) = CARDS[i], CARDS[i + 1]
     # no whitespace between the two cards: exactly 50% + 50% of the README width
