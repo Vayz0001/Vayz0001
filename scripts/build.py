@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Generate the profile README and its SVG assets (light + dark).
+"""Generate the personal profile README and its SVG assets (light + dark).
+The products live on the rushlabs-ai org profile, so this page is about the person.
 
 Run:  python3 scripts/build.py
 Writes assets/*.<hash>.svg (content-hashed names bypass GitHub's image cache)
@@ -64,8 +65,17 @@ def chips(x, y, items, t, size=14, gap=8, pad=11, h=28):
 
 
 # ── Header ──────────────────────────────────────────────────────────────────
+HEADER_ALT = ("Vayz, founder of Rush Labs. Systems engineer building fast, local AI search. "
+              "Rust, Go, TypeScript and Python. Shipping production systems since 2021, "
+              "5 open-source releases, NVIDIA Inception member.")
+TAGLINE = ("Systems engineer building fast,", "local AI search.")
+STATUS = "Building in the open"
+METRICS = [("5 yrs", ["Shipping production", "systems"]), ("5", ["Open-source releases"]),
+           ("9 of 11", ["BEIR sets where Rush", "Small beats its base"]), ("NVIDIA", ["Inception member"])]
+
+
 def header(t):
-    W, H = 1000, 378
+    W, H = 1000, 398
     css = """
     .scan{animation:scan 7s ease-in-out .4s infinite both}
     @keyframes scan{0%{transform:translateY(0);opacity:0}5%{opacity:1}34%{transform:translateY(90px);opacity:1}40%,100%{transform:translateY(90px);opacity:0}}
@@ -74,148 +84,110 @@ def header(t):
     .ring{animation:ring 2.4s ease-out 1s infinite both}
     @keyframes ring{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(3.2)}}
     """
-    b = [text(PAD, 72, "RUSH LABS · FOUNDER & LEAD ENGINEER", "sans", 13, t["accent"], 700, ls=1),
+    b = [text(PAD, 72, "FOUNDER · RUSH LABS", "sans", 13, t["accent"], 700, ls=1),
          text(PAD - 3, 150, "Vayz", "sans", 80, t["text"], 700, ls=-1.5),
-         text(PAD, 194, "Low latency execution and on-chain", "sans", 20, t["muted"]),
-         text(PAD, 222, "data infrastructure.", "sans", 20, t["muted"]),
-         # availability, pulsing
+         text(PAD, 194, TAGLINE[0], "sans", 20, t["muted"]),
+         text(PAD, 222, TAGLINE[1], "sans", 20, t["muted"]),
          f'<circle class="fx ring pivot" cx="{PAD + 6}" cy="256" r="5" fill="none" stroke="{t["ok"]}" stroke-width="1.5"/>',
          f'<circle cx="{PAD + 6}" cy="256" r="5" fill="{t["ok"]}"/>',
-         text(PAD + 20, 262, "Available for contract work", "sans", 16, t["text"], 700)]
+         text(PAD + 20, 262, STATUS, "sans", 16, t["text"], 700)]
 
     px, py, pw, ph = 560, 40, 400, 196
     b.append(f'<rect x="{px}" y="{py}" width="{pw}" height="{ph}" rx="12" fill="{t["panel"]}" stroke="{t["border"]}"/>')
     for i in range(3):
         b.append(f'<circle cx="{px + 22 + i * 16}" cy="{py + 20}" r="4.5" fill="{t["border"]}"/>')
-    b.append(text(px + pw - 20, py + 25, "frenbot", "mono", 13, t["muted"], anchor="end"))
+    b.append(text(px + pw - 20, py + 25, "~", "mono", 13, t["muted"], anchor="end"))
     lx, ly, step = px + 22, py + 62, 30
     b.append(f'<rect class="fx scan" x="{px + 10}" y="{ly - 19}" width="{pw - 20}" height="26" rx="6" fill="{t["accent"]}" fill-opacity=".14"/>')
-    b.append(text(lx, ly, "$", "mono", 14, t["accent"], 700) + text(lx + 16, ly, "frenbot --watch mempool", "mono", 14, t["muted"]))
-    b.append(text(lx, ly + step, "› pool_create detected", "mono", 14, t["text"]))
-    b.append(text(lx, ly + 2 * step, "› prebuilt tx submitted", "mono", 14, t["text"])
-             + text(px + pw - 22, ly + 2 * step, "~30 ms", "mono", 14, t["accent"], 700, anchor="end"))
-    b.append(text(lx, ly + 3 * step, "› included · same block", "mono", 14, t["text"])
+    b.append(text(lx, ly, "$", "mono", 14, t["accent"], 700) + text(lx + 16, ly, "whoami", "mono", 14, t["muted"]))
+    b.append(text(lx, ly + step, "› vayz · founder, rush labs", "mono", 14, t["text"]))
+    b.append(text(lx, ly + 2 * step, "› rust · go · typescript · python", "mono", 14, t["text"]))
+    b.append(text(lx, ly + 3 * step, "› now: rerankers, local search", "mono", 14, t["text"])
              + text(px + pw - 22, ly + 3 * step, "✓", "mono", 15, t["ok"], 700, anchor="end"))
     b.append(f'<rect class="cur" x="{lx}" y="{ly + 4 * step - 13}" width="9" height="17" fill="{t["accent"]}"/>')
 
     b.append(f'<line x1="{PAD}" y1="290" x2="{W - PAD}" y2="290" stroke="{t["border"]}"/>')
-    metrics = [("$10M+", "Cumulative volume"), ("2,500+", "Users"),
-               ("~30 ms", "Reaction time · was 1–3 s"), ("40+", "Clients since 2021")]
     col = (W - 2 * PAD) / 4
-    for i, (v, c) in enumerate(metrics):
+    for i, (v, caps) in enumerate(METRICS):
         x = PAD + i * col
         if i:
-            b.append(f'<line x1="{x - 16:.0f}" y1="308" x2="{x - 16:.0f}" y2="352" stroke="{t["border"]}"/>')
+            b.append(f'<line x1="{x - 16:.0f}" y1="308" x2="{x - 16:.0f}" y2="372" stroke="{t["border"]}"/>')
         b.append(text(round(x, 1), 332, v, "sans", 30, t["text"], 700))
-        b.append(text(round(x, 1), 354, c, "sans", 15, t["muted"]))
-    title = ("Vayz, founder and lead engineer at Rush Labs. Low latency execution and on-chain data infrastructure. "
-             "Available for contract work. $10M+ cumulative volume, 2,500+ users, about 30 ms reaction time "
-             "(was 1–3 s), 40+ clients since 2021.")
-    return svg(W, H, title, "".join(b), t, css)
+        for j, c in enumerate(caps):
+            b.append(text(round(x, 1), 354 + j * 19, c, "sans", 15, t["muted"]))
+    return svg(W, H, HEADER_ALT, "".join(b), t, css)
 
 
-# ── Work cards: 2 columns; the gap is drawn inside each SVG so outer edges align ──
-CARDS = [
-    ("frenbot", dict(cat="Cardano · Execution", years="2024–26", title="FrenBot",
-                     line="Multi-wallet trading terminal · $100K+\u00a0in\u00a0fees",
-                     tags=["Rust", "Go", "Ogmios"], href="https://rushlabs.io/work/frenbot")),
-    ("execution", dict(cat="Polymarket · Execution", years="2025", title="Execution engine",
-                       line="Orders prepared in advance, fired on trigger",
-                       tags=["Rust", "Polymarket CLOB"], href="https://rushlabs.io/work/polymarket-execution")),
-    ("zing", dict(cat="Cardano · Alerts", years="2024–now", title="Zing",
-                  line="Wallet alerts before confirmation · 1,500+ users",
-                  tags=["Ogmios", "Kupo", "WebSockets"], href="https://rushlabs.io/work/zing")),
-    ("polyzing", dict(cat="Polymarket · Alerts", years="2025", title="PolyZing",
-                      line="Wallet trade alerts · 100+ users",
-                      tags=["Bun", "MongoDB", "WebSockets"], href="https://rushlabs.io/work/polyzing")),
-    ("dataapi", dict(cat="Cardano · Indexing", years="2024", title="Chain data API",
-                     line="Indexed chain data · partner APIs for DEXs",
-                     tags=["Go", "PostgreSQL", "Kupo"], href="https://rushlabs.io/work/chain-data-api")),
-    ("polyfarmer", dict(cat="Polymarket · Open source", years="2026", title="Polyfarmer",
-                        line="Open source market maker · keys stay local",
-                        tags=["Rust", "Tokio", "Axum"], href="https://github.com/Vayz0001/polyfarmer")),
-]
-CARD_W, CARD_H, GAP = 488, 196, 24   # viewBox = (CARD_W + GAP/2) x CARD_H ; each card keeps GAP/2 on its inner side
+# ── The lab: one wide card that sends people to the org profile ─────────────
+LAB = dict(href="https://github.com/rushlabs-ai", url="github.com/rushlabs-ai",
+           line="An applied AI lab: open-source models and tools for search, retrieval and local inference.",
+           tags=["rerankers", "local search", "fine-tuning", "open models"])
+LAB_ALT = "Building Rush Labs. " + LAB["line"] + " github.com/rushlabs-ai"
+LAB_CSS = (".nudge{animation:nudge 3.2s ease-in-out 1s infinite both}"
+           "@keyframes nudge{0%,60%,100%{transform:translateX(0)}30%{transform:translateX(6px)}}")
 
 
-def motif(kind, t, delay):
-    """56x56 illustration, top right of the card (x 392-448, y 26-82). Loops gently."""
-    m, a, bd = t["muted"], t["accent"], t["border"]
-    d = f"animation-delay:{delay}s"
-    o = []
-    if kind == "frenbot":  # chained blocks; our buy lands right after the pool tx
-        for i, x in enumerate((392, 412, 432)):
-            o.append(f'<rect x="{x}" y="45" width="17" height="17" rx="4" fill="{t["chip"]}" stroke="{bd}"/>')
-        o.append(f'<line x1="409" y1="53.5" x2="412" y2="53.5" stroke="{bd}" stroke-width="2"/>')
-        o.append(f'<line x1="429" y1="53.5" x2="432" y2="53.5" stroke="{bd}" stroke-width="2"/>')
-        o.append(f'<rect x="435" y="49" width="11" height="3.5" rx="1.5" fill="{m}" opacity=".6"/>')
-        o.append(f'<rect class="land" style="{d}" x="435" y="55" width="11" height="3.5" rx="1.5" fill="{a}"/>')
-    elif kind == "execution":  # trigger -> order, a packet travels the wire
-        o.append(f'<circle cx="398" cy="54" r="7" fill="none" stroke="{a}" stroke-width="2"/>')
-        o.append(f'<circle cx="398" cy="54" r="2.5" fill="{a}"/>')
-        o.append(f'<line x1="409" y1="54" x2="428" y2="54" stroke="{m}" stroke-width="2" stroke-dasharray="3 3" opacity=".6"/>')
-        o.append(f'<path d="M425 49 L431 54 L425 59" fill="none" stroke="{m}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity=".6"/>')
-        o.append(f'<circle class="fx packet" style="{d}" cx="409" cy="54" r="2.8" fill="{a}"/>')
-        o.append(f'<rect x="434" y="46" width="15" height="15" rx="3.5" fill="{a}"/>')
-    elif kind == "zing":  # mempool pulse with a ping
-        o.append(f'<polyline points="392,54 404,54 410,40 418,68 424,48 429,54 442,54" fill="none" stroke="{a}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>')
-        o.append(f'<circle class="fx ping pivot" style="{d}" cx="445" cy="54" r="3.5" fill="none" stroke="{a}" stroke-width="1.5"/>')
-        o.append(f'<circle cx="445" cy="54" r="3" fill="{a}"/>')
-    elif kind == "polyzing":  # fan out to three channels
-        o.append(f'<circle cx="398" cy="54" r="5" fill="{a}"/>')
-        for i, y in enumerate((36, 54, 72)):
-            o.append(f'<line x1="403" y1="54" x2="441" y2="{y}" stroke="{m}" stroke-width="1.5" opacity=".6"/>')
-            o.append(f'<circle cx="444" cy="{y}" r="4" fill="none" stroke="{a}" stroke-width="2"/>')
-            o.append(f'<circle class="fx fan" style="animation-delay:{delay + i * .18:.2f}s;--dy:{y - 54}px" cx="403" cy="54" r="2.5" fill="{a}"/>')
-    elif kind == "dataapi":  # result table, rows stream in
-        for i in range(4):
-            y = 34 + i * 11
-            hi = i == 0
-            for x, w in ((392, 26), (422, 26)):
-                o.append(f'<rect x="{x}" y="{y}" width="{w}" height="6" rx="2" fill="{a if hi else m}" opacity="{1 if hi else .4}"/>')
-            if i:
-                o.append(f'<rect class="fx row" style="animation-delay:{delay + i * .25:.2f}s" x="392" y="{y}" width="56" height="6" rx="2" fill="{a}"/>')
-    elif kind == "polyfarmer":  # order book ladder; our quote re-quotes
-        for i, w in enumerate([18, 28, 38, 0, 50, 34, 22]):
-            y = 31 + i * 7
-            if w == 0:
-                o.append(f'<line x1="398" y1="{y + 2}" x2="448" y2="{y + 2}" stroke="{bd}" stroke-dasharray="2 3"/>')
-                continue
-            hi = i == 4
-            cls = f' class="requote" style="{d}"' if hi else ""
-            o.append(f'<rect{cls} x="{448 - w}" y="{y}" width="{w}" height="4" rx="1.5" fill="{a if hi else m}" opacity="{1 if hi else .4}"/>')
-    return "".join(o)
+def lab(t):
+    W, H = 1000, 184
+    b = [text(PAD, 46, "BUILDING", "sans", 14, t["accent"], 700, ls=1),
+         text(PAD, 86, "Rush Labs", "sans", 30, t["text"], 700, ls=-0.4),
+         f'<g class="nudge"><path d="M{PAD + 172} 76 L{PAD + 188} 76 M{PAD + 181} 69 L{PAD + 188} 76 L{PAD + 181} 83" '
+         f'fill="none" stroke="{t["accent"]}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g>',
+         text(PAD, 118, LAB["line"], "sans", 17, t["muted"]),
+         chips(PAD, 132, LAB["tags"], t),
+         text(W - PAD, 46, LAB["url"], "mono", 14, t["muted"], anchor="end")]
+    return svg(W, H, LAB_ALT, "".join(b), t, LAB_CSS)
 
 
-CARD_CSS = """
-.land{animation:land 5s ease-in-out infinite both}
-@keyframes land{0%,30%,100%{opacity:1}15%{opacity:.15}}
-.ping{animation:ping 3s ease-out infinite both}
-@keyframes ping{0%{opacity:.9;transform:scale(1)}55%,100%{opacity:0;transform:scale(3)}}
-.requote{animation:requote 5s ease-in-out infinite both}
-@keyframes requote{0%,40%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}}
-.packet{animation:packet 2.8s ease-in infinite both}
-@keyframes packet{0%{opacity:0;transform:translateX(0)}6%{opacity:1}36%{opacity:1;transform:translateX(19px)}42%,100%{opacity:0;transform:translateX(21px)}}
-.row{animation:row 4.5s ease-out infinite both}
-@keyframes row{0%{opacity:.5}22%,100%{opacity:0}}
-.fan{animation:fan 3.2s ease-in infinite both}
-@keyframes fan{0%{opacity:0;transform:translate(0,0)}6%{opacity:1}34%{opacity:1;transform:translate(36px,var(--dy))}40%,100%{opacity:0;transform:translate(38px,var(--dy))}}
-"""
+def lab_m(t):
+    W, P = 400, 24
+    lines = wrap(LAB["line"], W - 2 * P, 16)
+    H = 104 + len(lines) * 21
+    b = [text(P, 40, "BUILDING", "sans", 13, t["accent"], 700, ls=0.6),
+         text(P, 74, "Rush Labs →", "sans", 24, t["text"], 700, ls=-0.3)]
+    for i, line in enumerate(lines):
+        b.append(text(P, 102 + i * 21, line, "sans", 16, t["muted"]))
+    return svg(W, H, LAB_ALT, "".join(b), t)
 
 
-def card(c, key, t, side, delay):
-    half = GAP // 2
-    W, H = CARD_W + half, CARD_H
-    dx = 0 if side == "L" else half
-    b = [text(PAD, 46, c["cat"], "sans", 14, t["accent"], 700),
-         text(PAD, 84, c["title"], "sans", 28, t["text"], 700, ls=-0.4),
-         text(PAD, 120, c["line"], "sans", 18, t["muted"]),
-         chips(PAD, 142, c["tags"], t),
-         text(CARD_W - PAD, 46, c["years"], "mono", 14, t["muted"], anchor="end"),
-         f'<g transform="translate(0,22)">{motif(key, t, delay)}</g>']
-    body = f'<g transform="translate({dx},0)">{"".join(b)}</g>'
-    title = f'{c["title"]} ({c["cat"]}, {c["years"]}): {c["line"]}. {", ".join(c["tags"])}.'
-    return svg(W, H, title, body, t, CARD_CSS, rect=(dx + 0.5, 0.5, CARD_W - 1, CARD_H - 1))
+# ── Path: three steps, oldest first ─────────────────────────────────────────
+PATH = [("2021", "Product analyst", "Payments software for banks"),
+        ("2021–26", "Systems engineer", "Low-latency trading systems, Rust and Go"),
+        ("2026–now", "Founder, Rush Labs", "Open-source AI search, NVIDIA Inception")]
+PATH_ALT = "Path: " + " ".join(f"{y}, {r}: {d}." for y, r, d in PATH)
+PATH_CSS = (".now{animation:now 2.4s ease-out 1s infinite both}"
+            "@keyframes now{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(3)}}")
+
+
+def path(t):
+    W, H = 1000, 176
+    col = (W - 2 * PAD) / 3
+    b = [text(PAD, 46, "PATH", "sans", 14, t["accent"], 700, ls=1),
+         f'<line x1="{PAD + 6}" y1="74" x2="{PAD + 2 * col + 6:.0f}" y2="74" stroke="{t["border"]}" stroke-width="2"/>']
+    for i, (year, role, desc) in enumerate(PATH):
+        x = PAD + i * col
+        last = i == len(PATH) - 1
+        if last:
+            b.append(f'<circle class="fx now pivot" cx="{x + 6:.0f}" cy="74" r="6" fill="none" stroke="{t["ok"]}" stroke-width="1.5"/>')
+        b.append(f'<circle cx="{x + 6:.0f}" cy="74" r="6" fill="{t["ok"] if last else t["border"]}"/>')
+        b.append(text(round(x, 1), 110, year, "mono", 14, t["muted"]))
+        b.append(text(round(x, 1), 136, role, "sans", 19, t["text"], 700))
+        b.append(text(round(x, 1), 160, desc, "sans", 15, t["muted"]))
+    return svg(W, H, PATH_ALT, "".join(b), t, PATH_CSS)
+
+
+def path_m(t):
+    W, P, row = 400, 24, 74
+    H = 60 + row * len(PATH)
+    b = [text(P, 40, "PATH", "sans", 13, t["accent"], 700, ls=0.6),
+         f'<line x1="{P + 6}" y1="66" x2="{P + 6}" y2="{66 + row * (len(PATH) - 1)}" stroke="{t["border"]}" stroke-width="2"/>']
+    for i, (year, role, desc) in enumerate(PATH):
+        y = 66 + i * row
+        last = i == len(PATH) - 1
+        b.append(f'<circle cx="{P + 6}" cy="{y}" r="6" fill="{t["ok"] if last else t["border"]}"/>')
+        b.append(text(P + 24, y + 5, f"{year} · {role}", "sans", 17, t["text"], 700))
+        b.append(text(P + 24, y + 28, desc, "sans", 15, t["muted"]))
+    return svg(W, H, PATH_ALT, "".join(b), t, PATH_CSS)
 
 
 # ── Recognition strip ───────────────────────────────────────────────────────
@@ -255,47 +227,25 @@ def wrap(s, max_w, size, em=0.53):
 
 
 def header_m(t):
-    W, H = 400, 418
+    W, H = 400, 438
     css = (".ring{animation:ring 2.4s ease-out 1s infinite both}"
            "@keyframes ring{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(3.2)}}")
     P = 24
-    b = [text(P, 46, "RUSH LABS · FOUNDER & LEAD ENGINEER", "sans", 14, t["accent"], 700, ls=0.4),
+    b = [text(P, 46, "FOUNDER · RUSH LABS", "sans", 14, t["accent"], 700, ls=0.4),
          text(P - 2, 110, "Vayz", "sans", 62, t["text"], 700, ls=-1),
-         text(P, 146, "Low latency execution and on-chain", "sans", 19, t["muted"]),
-         text(P, 171, "data infrastructure.", "sans", 19, t["muted"]),
+         text(P, 146, TAGLINE[0], "sans", 19, t["muted"]),
+         text(P, 171, TAGLINE[1], "sans", 19, t["muted"]),
          f'<circle class="fx ring pivot" cx="{P + 6}" cy="205" r="5" fill="none" stroke="{t["ok"]}" stroke-width="1.5"/>',
          f'<circle cx="{P + 6}" cy="205" r="5" fill="{t["ok"]}"/>',
-         text(P + 20, 211, "Available for contract work", "sans", 17, t["text"], 700),
+         text(P + 20, 211, STATUS, "sans", 17, t["text"], 700),
          f'<line x1="{P}" y1="234" x2="{W - P}" y2="234" stroke="{t["border"]}"/>']
-    metrics = [("$10M+", ["Cumulative volume"]), ("2,500+", ["Users"]),
-               ("~30 ms", ["Reaction time", "was 1–3 s"]), ("40+", ["Clients since 2021"])]
-    for i, (v, caps) in enumerate(metrics):
+    for i, (v, caps) in enumerate(METRICS):
         x = P + (i % 2) * 180
-        y = 278 + (i // 2) * 76
+        y = 278 + (i // 2) * 84
         b.append(text(x, y, v, "sans", 28, t["text"], 700))
         for j, c in enumerate(caps):
-            b.append(text(x, y + 22 + j * 19, c, "sans", 16, t["muted"]))
-    title = ("Vayz, founder and lead engineer at Rush Labs. Low latency execution and on-chain data infrastructure. "
-             "Available for contract work. $10M+ cumulative volume, 2,500+ users, about 30 ms reaction time "
-             "(was 1–3 s), 40+ clients since 2021.")
-    return svg(W, H, title, "".join(b), t, css)
-
-
-CARD_W_M, CARD_H_M, GAP_M = 210, 150, 24
-
-
-def card_m(c, t, side):
-    half = GAP_M // 2
-    W, H = CARD_W_M + half, CARD_H_M
-    dx = 0 if side == "L" else half
-    P = 16
-    b = [text(P, 30, c["cat"], "sans", 13, t["accent"], 700),
-         text(P, 58, c["title"], "sans", 20, t["text"], 700, ls=-0.3)]
-    for i, line in enumerate(wrap(c["line"], CARD_W_M - 2 * P, 16)[:3]):
-        b.append(text(P, 86 + i * 20, line, "sans", 16, t["muted"]))
-    body = f'<g transform="translate({dx},0)">{"".join(b)}</g>'
-    title = f'{c["title"]} ({c["cat"]}, {c["years"]}): {c["line"]}.'
-    return svg(W, H, title, body, t, "", rect=(dx + 0.5, 0.5, CARD_W_M - 1, CARD_H_M - 1))
+            b.append(text(x, y + 22 + j * 19, c, "sans", 15, t["muted"]))
+    return svg(W, H, HEADER_ALT, "".join(b), t, css)
 
 
 def award_m(t):
@@ -332,14 +282,9 @@ def icon_web():
 # ── Build ───────────────────────────────────────────────────────────────────
 files = {"icon-discord": icon_discord(), "icon-web": icon_web()}
 for name, t in THEMES.items():
-    files[f"header-{name}"] = header(t)
-    files[f"award-{name}"] = award(t)
-    files[f"header-m-{name}"] = header_m(t)
-    files[f"award-m-{name}"] = award_m(t)
-    for i, (key, c) in enumerate(CARDS):
-        side = "L" if i % 2 == 0 else "R"
-        files[f"card-{key}-{name}"] = card(c, key, t, side, delay=1.0 + i * 0.35)
-        files[f"card-m-{key}-{name}"] = card_m(c, t, side)
+    for stem, fn in (("header", header), ("lab", lab), ("path", path), ("award", award),
+                     ("header-m", header_m), ("lab-m", lab_m), ("path-m", path_m), ("award-m", award_m)):
+        files[f"{stem}-{name}"] = fn(t)
 
 VER = hashlib.sha1("".join(files[k] for k in sorted(files)).encode()).hexdigest()[:7]
 for old in OUT.glob("*.svg"):
@@ -363,24 +308,15 @@ def pic(stem, alt, width="100%", href=None, mobile=None):
     return f'<a href="{href}">{p}</a>' if href else p
 
 
-def card_alt(c):
-    return f'{c["title"]}: {c["line"]}. {", ".join(c["tags"])}.'
-
-
-blocks = [pic("header", "Vayz, founder and lead engineer at Rush Labs. Low latency execution and on-chain data infrastructure. "
-                        "Available for contract work. $10M+ cumulative volume, 2,500+ users, about 30 ms reaction time "
-                        "(was 1–3 s), 40+ clients since 2021.", mobile="header-m")]
-for i in range(0, len(CARDS), 2):
-    (ka, ca), (kb, cb) = CARDS[i], CARDS[i + 1]
-    # no whitespace between the two cards: exactly 50% + 50% of the README width
-    blocks.append(pic(f"card-{ka}", card_alt(ca), "50%", ca["href"], mobile=f"card-m-{ka}")
-                  + pic(f"card-{kb}", card_alt(cb), "50%", cb["href"], mobile=f"card-m-{kb}"))
-blocks.append(pic("award", "2nd of 47 teams, BuidlGuidl AI CTF at Devcon 8, Mumbai, November 2026. 12 of 12 flags captured.",
-                  href="https://ctf-mumbai.buidlguidl.com/leaderboard", mobile="award-m"))
-blocks.append(f'<p align="center">'
-              f'<img src="assets/icon-discord.{VER}.svg" height="15" alt="Discord"> <code>vayzzz</code>'
-              f'&nbsp;&nbsp;·&nbsp;&nbsp;'
-              f'<img src="assets/icon-web.{VER}.svg" height="15" alt="Website"> <a href="https://rushlabs.io">rushlabs.io</a>'
-              f'</p>')
+blocks = [pic("header", HEADER_ALT, mobile="header-m"),
+          pic("lab", LAB_ALT, href=LAB["href"], mobile="lab-m"),
+          pic("path", PATH_ALT, mobile="path-m"),
+          pic("award", "2nd of 47 teams, BuidlGuidl AI CTF at Devcon 8, Mumbai, November 2026. 12 of 12 flags captured.",
+              href="https://ctf-mumbai.buidlguidl.com/leaderboard", mobile="award-m"),
+          f'<p align="center">'
+          f'<img src="assets/icon-discord.{VER}.svg" height="15" alt="Discord"> <code>vayzzz</code>'
+          f'&nbsp;&nbsp;·&nbsp;&nbsp;'
+          f'<img src="assets/icon-web.{VER}.svg" height="15" alt="Website"> <a href="https://rushlabs.ai">rushlabs.ai</a>'
+          f'</p>']
 (ROOT / "README.md").write_text("\n\n".join(blocks) + "\n")
 print("version", VER, "·", len(files), "svgs + README.md")
